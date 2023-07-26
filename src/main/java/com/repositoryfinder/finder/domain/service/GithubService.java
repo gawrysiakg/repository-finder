@@ -4,6 +4,9 @@ import com.repositoryfinder.finder.domain.model.Branch;
 import com.repositoryfinder.finder.domain.model.Owner;
 import com.repositoryfinder.finder.domain.model.RepositoryProperty;
 import com.repositoryfinder.finder.domain.model.SingleRepository;
+import feign.FeignException;
+import feign.RetryableException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +15,7 @@ import java.util.List;
 
 @EnableFeignClients
 @Service
+@Slf4j
 public class GithubService {
 
 
@@ -22,9 +26,22 @@ public class GithubService {
     }
 
     public List<RepositoryProperty> getNotForkedRepositoryNamesForUser(String username){
-        return githubClient.getAllReposForUser(username).stream()
-                .filter(repositoryProperty -> !repositoryProperty.fork())
-                .toList();
+       // try{
+            return githubClient.getAllReposForUser(username).stream()
+                    .filter(repositoryProperty -> !repositoryProperty.fork())
+                    .toList();
+//        }  catch (
+//    FeignException.FeignClientException exception) {
+//        log.error("Feign client exception " + exception.status()); //getMessage print body message
+//    } catch (FeignException.FeignServerException serverException) {
+//        log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
+//    } catch (
+//    RetryableException retryableException) {
+//        log.error("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
+//    } catch (FeignException feignException) {
+//        log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
+//    }
+//        return new ArrayList<>();
     }
 
 
