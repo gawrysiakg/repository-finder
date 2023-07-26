@@ -1,4 +1,4 @@
-package com.repositoryfinder;
+package com.repositoryfinder.finder;
 
 import feign.codec.Decoder;
 import feign.jackson.JacksonDecoder;
