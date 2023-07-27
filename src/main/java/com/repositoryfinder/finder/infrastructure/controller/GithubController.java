@@ -6,6 +6,7 @@ import com.repositoryfinder.finder.domain.model.SingleRepository;
 import com.repositoryfinder.finder.infrastructure.dto.GithubResponseDto;
 import com.repositoryfinder.finder.infrastructure.dto.GithubRequestDto;
 import feign.Headers;
+import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,9 @@ public class GithubController {
         this.githubService = githubService;
     }
 
-    @GetMapping (headers="Accept=application/json", consumes="application/json", produces="application/json")
-    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody GithubRequestDto githubRequestDto) {
+    @GetMapping (headers="Accept=application/json" , consumes="application/json")//, produces="application/json")
+   // @Headers(value = "Accept=application/json")
+    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody @Valid GithubRequestDto githubRequestDto) {
         List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
         return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
     }

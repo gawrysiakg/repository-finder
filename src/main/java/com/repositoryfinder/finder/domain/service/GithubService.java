@@ -1,14 +1,13 @@
 package com.repositoryfinder.finder.domain.service;
 
-import com.repositoryfinder.finder.domain.model.Branch;
-import com.repositoryfinder.finder.domain.model.Owner;
-import com.repositoryfinder.finder.domain.model.RepositoryProperty;
-import com.repositoryfinder.finder.domain.model.SingleRepository;
+import com.repositoryfinder.finder.domain.model.*;
 import feign.FeignException;
 import feign.RetryableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.stereotype.Service;
+import org.springframework.web.HttpMediaTypeException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,36 +24,41 @@ public class GithubService {
         this.githubClient = githubClient;
     }
 
-    public List<RepositoryProperty> getNotForkedRepositoryNamesForUser(String username){
-       // try{
+    public List<RepositoryProperty> getNotForkedRepositoryNamesForUser(String username) {
+        try {
             return githubClient.getAllReposForUser(username).stream()
                     .filter(repositoryProperty -> !repositoryProperty.fork())
                     .toList();
-//        }  catch (
-//    FeignException.FeignClientException exception) {
-//        log.error("Feign client exception " + exception.status()); //getMessage print body message
-//    } catch (FeignException.FeignServerException serverException) {
-//        log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
-//    } catch (
-//    RetryableException retryableException) {
-//        log.error("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
-//    } catch (FeignException feignException) {
-//        log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
-//    }
-//        return new ArrayList<>();
-    }
-
-
-    public List<SingleRepository> getAllReposWithBranches(String username){
-        List<RepositoryProperty> repositoryNames = getNotForkedRepositoryNamesForUser(username);
-        List<SingleRepository> list = new ArrayList<>();
-        for(RepositoryProperty repository : repositoryNames){
-            List<Branch> allBranchesForRepo = githubClient.getAllBranchesForRepo(username,  repository.name());
-            list.add(new SingleRepository(repository.name(), new Owner(username), repository.fork(), allBranchesForRepo));
+//        } catch (HttpMediaTypeNotAcceptableException  notAcceptable) {
+//            log.error("Feign not acceptable exception " + notAcceptable.getMessage() + " " );
+//           // throw new NotExistingUserException("Only application/json accepted");
+        } catch (FeignException.FeignClientException exception) {
+            log.error("Feign client exception " + exception.status()); //getMessage print body message
+            throw new NotExistingUserException("Resources not found for this user");
+        } catch (FeignException.FeignServerException serverException) {
+            log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
+        } catch (
+                RetryableException retryableException) {
+            log.error("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
+        } catch (FeignException feignException) {
+            log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
         }
-        return list;
+        return new ArrayList<>();
     }
 
+
+    public List<SingleRepository> getAllReposWithBranches(String username) {
+
+            List<RepositoryProperty> repositoryNames = getNotForkedRepositoryNamesForUser(username);
+            List<SingleRepository> list = new ArrayList<>();
+            for (RepositoryProperty repository : repositoryNames) {
+                List<Branch> allBranchesForRepo = githubClient.getAllBranchesForRepo(username, repository.name());
+                list.add(new SingleRepository(repository.name(), new Owner(username), repository.fork(), allBranchesForRepo));
+            }
+            return list;
+
+
+    }
 
 
 }
