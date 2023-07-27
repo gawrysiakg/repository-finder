@@ -34,7 +34,7 @@ public class GithubService {
 //           // throw new NotExistingUserException("Only application/json accepted");
         } catch (FeignException.FeignClientException exception) {
             log.error("Feign client exception " + exception.status()); //getMessage print body message
-            throw new NotExistingUserException("Resources not found for this user");
+            throw new NotExistingUserException("Resources not found for this user, probably bad username");
         } catch (FeignException.FeignServerException serverException) {
             log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
         } catch (

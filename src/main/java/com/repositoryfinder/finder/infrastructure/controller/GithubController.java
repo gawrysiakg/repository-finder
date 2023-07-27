@@ -5,6 +5,7 @@ import com.repositoryfinder.finder.domain.service.GithubService;
 import com.repositoryfinder.finder.domain.model.SingleRepository;
 import com.repositoryfinder.finder.infrastructure.dto.GithubResponseDto;
 import com.repositoryfinder.finder.infrastructure.dto.GithubRequestDto;
+import com.repositoryfinder.finder.infrastructure.error.BadMediaTypeException;
 import feign.Headers;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
@@ -25,12 +26,19 @@ public class GithubController {
         this.githubService = githubService;
     }
 
-    @GetMapping (headers="Accept=application/json" , consumes="application/json")//, produces="application/json")
+    @GetMapping// (headers="Accept=application/json" , consumes="application/json")//, produces="application/json")
    // @Headers(value = "Accept=application/json")
-    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody @Valid GithubRequestDto githubRequestDto) {
-        List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
-        return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
+        ResponseEntity<List<GithubResponseDto>> getAllByUsername(
+                @RequestBody @Valid GithubRequestDto githubRequestDto,
+                @RequestHeader (name = "Accept") String accept) {
+            if(!(accept.equals("Accept=application/json")))
+                throw new BadMediaTypeException("Not acceptable media type, only application/json");
+
+            List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
+            return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
     }
+
+
 //Kluczowe jest, że "Content-Type" odnosi się do typu zawartości przesyłanej w ciele żądania,
 // a "Accept" określa preferowany typ mediów w odpowiedzi serwera, który klient chciałby otrzymać.
 }
