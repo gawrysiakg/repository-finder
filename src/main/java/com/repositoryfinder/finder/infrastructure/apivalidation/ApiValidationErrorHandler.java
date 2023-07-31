@@ -20,7 +20,6 @@ public class ApiValidationErrorHandler {
     @ResponseBody//(bo inaczej nam zwróci html strony)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiValidationErrorResponseDto handleValidationException(MethodArgumentNotValidException e){
-        //return "our message";  //jak zwrócimy string a mamy thymeleaf to domyślnie szuka w template i nie znajduje
         List<String> errorsFromException = getErrorsFromException(e);
         return new ApiValidationErrorResponseDto(errorsFromException, HttpStatus.BAD_REQUEST);
     }

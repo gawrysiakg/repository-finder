@@ -1,21 +1,20 @@
 package com.repositoryfinder.finder.infrastructure.controller;
 
 import com.repositoryfinder.finder.GithubMapper;
+import com.repositoryfinder.finder.domain.model.NotAcceptableResponseMediaTypeException;
 import com.repositoryfinder.finder.domain.service.GithubService;
 import com.repositoryfinder.finder.domain.model.SingleRepository;
 import com.repositoryfinder.finder.infrastructure.dto.GithubResponseDto;
 import com.repositoryfinder.finder.infrastructure.dto.GithubRequestDto;
-import com.repositoryfinder.finder.infrastructure.error.BadMediaTypeException;
-import feign.Headers;
 import jakarta.validation.Valid;
+import jdk.jfr.ContentType;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.HttpHeaders.ACCEPT;
 
 @RestController
 public class GithubController {
@@ -26,19 +25,19 @@ public class GithubController {
         this.githubService = githubService;
     }
 
-    @GetMapping// (headers="Accept=application/json" , consumes="application/json")//, produces="application/json")
-   // @Headers(value = "Accept=application/json")
-        ResponseEntity<List<GithubResponseDto>> getAllByUsername(
-                @RequestBody @Valid GithubRequestDto githubRequestDto,
-                @RequestHeader (name = "Accept") String accept) {
-            if(!(accept.equals("Accept=application/json")))
-                throw new BadMediaTypeException("Not acceptable media type, only application/json");
 
-            List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
-            return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
+    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE,  produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody @Valid GithubRequestDto githubRequestDto, @RequestHeader(name = ACCEPT) String accept) {
+        isApplicationXmlAcceptHeader(accept);
+        List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
+        return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
+    }
+
+    private static void isApplicationXmlAcceptHeader(String accept) {
+        if (accept.equals(MediaType.APPLICATION_XML_VALUE)) {
+            throw new NotAcceptableResponseMediaTypeException("xml is not acceptable media type, only application/json");
+        }
     }
 
 
-//Kluczowe jest, że "Content-Type" odnosi się do typu zawartości przesyłanej w ciele żądania,
-// a "Accept" określa preferowany typ mediów w odpowiedzi serwera, który klient chciałby otrzymać.
 }

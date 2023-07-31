@@ -29,9 +29,6 @@ public class GithubService {
             return githubClient.getAllReposForUser(username).stream()
                     .filter(repositoryProperty -> !repositoryProperty.fork())
                     .toList();
-//        } catch (HttpMediaTypeNotAcceptableException  notAcceptable) {
-//            log.error("Feign not acceptable exception " + notAcceptable.getMessage() + " " );
-//           // throw new NotExistingUserException("Only application/json accepted");
         } catch (FeignException.FeignClientException exception) {
             log.error("Feign client exception " + exception.status()); //getMessage print body message
             throw new NotExistingUserException("Resources not found for this user, probably bad username");
