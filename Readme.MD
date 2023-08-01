@@ -62,5 +62,16 @@ As an api consumer, if You give header “Accept: application/xml”, You will r
     "Message": "xml is not acceptable media type, only application/json"
 }
 ```
+#
+### Postman screens:
+
+![result](src/main/resources/images/result.png)
+
+![badUsername](src/main/resources/images/badUsername.png)
+
+![badAccept](src/main/resources/images/badAccept.png)
+#
+### Author: GG
+
 
  
