@@ -30,12 +30,11 @@ public class GithubService {
                     .filter(repositoryProperty -> !repositoryProperty.fork())
                     .toList();
         } catch (FeignException.FeignClientException exception) {
-            log.error("Feign client exception " + exception.status()); //getMessage print body message
+            log.error("Feign client exception " + exception.status());
             throw new NotExistingUserException("Resources not found for this user, probably bad username");
         } catch (FeignException.FeignServerException serverException) {
             log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
-        } catch (
-                RetryableException retryableException) {
+        } catch (RetryableException retryableException) {
             log.error("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
         } catch (FeignException feignException) {
             log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
@@ -46,15 +45,23 @@ public class GithubService {
 
     public List<SingleRepository> getAllReposWithBranches(String username) {
 
-            List<RepositoryProperty> repositoryNames = getNotForkedRepositoryNamesForUser(username);
-            List<SingleRepository> list = new ArrayList<>();
+        List<RepositoryProperty> repositoryNames = getNotForkedRepositoryNamesForUser(username);
+        List<SingleRepository> list = new ArrayList<>();
+        try {
             for (RepositoryProperty repository : repositoryNames) {
                 List<Branch> allBranchesForRepo = githubClient.getAllBranchesForRepo(username, repository.name());
                 list.add(new SingleRepository(repository.name(), new Owner(username), repository.fork(), allBranchesForRepo));
             }
-            return list;
 
+        } catch (FeignException.FeignServerException serverException) {
+            log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
+        } catch (RetryableException retryableException) {
+            log.error("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
+        } catch (FeignException feignException) {
+            log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
+        }
 
+        return list;
     }
 
 

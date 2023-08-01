@@ -13,20 +13,4 @@ public class Config {
         return new JacksonDecoder();
     }
 
-
-    //Dotyczy to Spring Boot w wersji 3 :
-    //
-    //Domyślnym typem zawartości używanym przez Feign jest application/x-www-form-urlencoded,
-    // dlatego widzisz to zachowanie. Aby zmienić Content-Type na application/json;charset=UTF-8,
-    // możesz skonfigurować Feign do używania innego kodera.
-    //
-    //Skonfiguruj Feign, aby używał JacksonEncoder:
-    //
-    //@Configuration
-    //public class FeignConfig {
-    //    @Bean
-    //    public Encoder feignEncoder() {
-    //        return new JacksonEncoder();
-    //    }
-
 }
