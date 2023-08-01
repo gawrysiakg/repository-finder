@@ -1,6 +1,8 @@
 package com.repositoryfinder.finder.infrastructure.error;
 
-public class BadMediaTypeException extends RuntimeException{
+import java.io.IOException;
+
+public class BadMediaTypeException extends IOException {
     public BadMediaTypeException(String message) {
         super(message);
     }
