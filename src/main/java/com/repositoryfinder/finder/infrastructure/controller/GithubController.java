@@ -7,8 +7,10 @@ import com.repositoryfinder.finder.domain.model.SingleRepository;
 import com.repositoryfinder.finder.infrastructure.dto.GithubResponseDto;
 import com.repositoryfinder.finder.infrastructure.dto.GithubRequestDto;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,12 +27,23 @@ public class GithubController {
     }
 
 
+
     @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody @Valid GithubRequestDto githubRequestDto, @RequestHeader(name = ACCEPT) String accept) {
-        isApplicationXmlAcceptHeader(accept);
+    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody @Valid GithubRequestDto githubRequestDto, @RequestHeader(HttpHeaders.ACCEPT) MediaType acceptHeader) throws HttpMediaTypeNotAcceptableException {
+        if (acceptHeader.equals(MediaType.APPLICATION_XML)) {
+            throw new HttpMediaTypeNotAcceptableException("%s is unsupported media type".formatted(acceptHeader));
+        }
         List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
         return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
     }
+
+
+//    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+//    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody @Valid GithubRequestDto githubRequestDto, @RequestHeader(name = ACCEPT) String accept) {
+//        isApplicationXmlAcceptHeader(accept);
+//        List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
+//        return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
+//    }
 
 
     private static void isApplicationXmlAcceptHeader(String accept) {

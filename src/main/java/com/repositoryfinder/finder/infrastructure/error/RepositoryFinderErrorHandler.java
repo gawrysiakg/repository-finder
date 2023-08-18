@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -24,9 +25,15 @@ public class RepositoryFinderErrorHandler  {
 
 
 
-    @ExceptionHandler(NotAcceptableResponseMediaTypeException.class)
-    ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(NotAcceptableResponseMediaTypeException exception) {
-        log.warn("RepositoryFinderErrorHandler is handling NotAcceptableResponseMediaTypeException: "+exception.getMessage());
+//    @ExceptionHandler(NotAcceptableResponseMediaTypeException.class)
+//    ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(NotAcceptableResponseMediaTypeException exception) {
+//        log.warn("RepositoryFinderErrorHandler is handling NotAcceptableResponseMediaTypeException: "+exception.getMessage());
+//        return toResponseEntity(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
+//    }
+
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(HttpMediaTypeNotAcceptableException exception) {
+        log.warn("RepositoryFinderErrorHandler is handling HttpMediaTypeNotAcceptableException: "+exception.getMessage());
         return toResponseEntity(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
     }
 
