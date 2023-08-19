@@ -1,6 +1,6 @@
 package com.repositoryfinder.finder.infrastructure.controller;
 
-import com.repositoryfinder.finder.GithubMapper;
+import com.repositoryfinder.finder.infrastructure.mapper.GithubMapper;
 import com.repositoryfinder.finder.domain.model.NotAcceptableResponseMediaTypeException;
 import com.repositoryfinder.finder.domain.service.GithubService;
 import com.repositoryfinder.finder.domain.model.SingleRepository;
@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpHeaders.ACCEPT;
-
 @RestController
 public class GithubController {
 
     private final GithubService githubService;
+
 
     public GithubController(GithubService githubService) {
         this.githubService = githubService;

@@ -20,6 +20,9 @@ public interface RepoRepository extends Repository<Repo, Long> {
     @Query("SELECT r FROM Repo r WHERE r.id = :id")
     Optional<Repo> findRepoById(Long id);
 
+    @Query("SELECT r FROM Repo r WHERE r.owner = :owner")
+    List<Repo> findAllByOwner(Pageable pageable, String owner);
+
     @Modifying
     @Query("DELETE FROM Repo r WHERE r.id = :id")
     void deleteById(Long id);
