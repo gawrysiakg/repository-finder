@@ -25,10 +25,7 @@ public class RepoUpdater {
     }
 
 
-    public void existsById(Long id) {
-        if (!repository.existsById(id))
-            throw new RepoNotFoundException("Repository with id " + id + " not exist");
-    }
+
 
 
 }
