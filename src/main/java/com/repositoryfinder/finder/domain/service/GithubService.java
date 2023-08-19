@@ -6,8 +6,6 @@ import feign.RetryableException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.stereotype.Service;
-import org.springframework.web.HttpMediaTypeException;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,16 +17,20 @@ public class GithubService {
 
 
     private final GithubProxy githubClient;
+    private final RepoUpdater repoUpdater;
 
-    public GithubService(GithubProxy githubClient) {
+    public GithubService(GithubProxy githubClient, RepoUpdater repoUpdater) {
         this.githubClient = githubClient;
+        this.repoUpdater = repoUpdater;
     }
 
     public List<RepositoryProperty> getNotForkedRepositoryNamesForUser(String username) {
         try {
-            return githubClient.getAllReposForUser(username).stream()
+            List<RepositoryProperty> notForkedRepositoryList = githubClient.getAllReposForUser(username).stream()
                     .filter(repositoryProperty -> !repositoryProperty.fork())
                     .toList();
+
+            return notForkedRepositoryList;
         } catch (FeignException.FeignClientException exception) {
             log.error("Feign client exception " + exception.status());
             throw new NotExistingUserException("Resources not found for this user, probably bad username");
@@ -61,6 +63,7 @@ public class GithubService {
             log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
         }
 
+        list.forEach(single->repoUpdater.updateToDatabaseIfNotExist(single));
         return list;
     }
 
