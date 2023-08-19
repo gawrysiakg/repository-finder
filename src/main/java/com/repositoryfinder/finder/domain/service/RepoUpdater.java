@@ -35,6 +35,7 @@ public class RepoUpdater {
             repoFromDb.setOwner(repoFromRequest.getOwner());
             return repoFromRequest;
         } else {
+            log.info("RepoNotFoundException - Not found repository with id: "+id);
             throw new RepoNotFoundException("Not found repository with id: "+id);
         }
     }
