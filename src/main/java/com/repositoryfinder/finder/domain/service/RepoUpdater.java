@@ -7,6 +7,8 @@ import com.repositoryfinder.finder.domain.repository.RepoRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class RepoUpdater {
@@ -25,7 +27,15 @@ public class RepoUpdater {
     }
 
 
-
-
-
+    public Repo updateRepository(Long id, Repo repoFromRequest) {
+        Optional<Repo> repoById = repository.findRepoById(id);
+        if(repoById.isPresent()){
+            Repo repoFromDb = repoById.get();
+            repoFromDb.setName(repoFromRequest.getName());
+            repoFromDb.setOwner(repoFromRequest.getOwner());
+            return repoFromRequest;
+        } else {
+            throw new RepoNotFoundException("Not found repository with id: "+id);
+        }
+    }
 }

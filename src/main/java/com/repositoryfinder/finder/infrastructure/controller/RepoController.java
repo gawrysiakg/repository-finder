@@ -1,15 +1,13 @@
 package com.repositoryfinder.finder.infrastructure.controller;
 
 import com.repositoryfinder.finder.domain.model.RepoNotFoundException;
-import com.repositoryfinder.finder.infrastructure.dto.RepoRequestDto;
+import com.repositoryfinder.finder.infrastructure.dto.*;
 import com.repositoryfinder.finder.infrastructure.mapper.GithubMapper;
 import com.repositoryfinder.finder.domain.model.Repo;
 import com.repositoryfinder.finder.domain.service.RepoAdder;
 import com.repositoryfinder.finder.domain.service.RepoDeleter;
 import com.repositoryfinder.finder.domain.service.RepoRetriever;
 import com.repositoryfinder.finder.domain.service.RepoUpdater;
-import com.repositoryfinder.finder.infrastructure.dto.GithubRequestDto;
-import com.repositoryfinder.finder.infrastructure.dto.RepoResponseDto;
 import com.repositoryfinder.finder.infrastructure.mapper.RepoMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -64,9 +62,22 @@ public class RepoController {
     }
 
     @PostMapping
-    ResponseEntity<RepoResponseDto> addRepositoryToDb(RepoRequestDto repoRequestDto){
+    ResponseEntity<RepoResponseDto> addRepositoryToDb(@RequestBody @Valid RepoRequestDto repoRequestDto){
         Repo repoFromRequest = RepoMapper.mapFromRepoRequestDtoToRepo(repoRequestDto);
         repoAdder.addRepo(repoFromRequest);
+        return ResponseEntity.ok(RepoMapper.mapFromRepoToRepoResponseDto(repoFromRequest));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    ResponseEntity<DeleteRepoResponseDto> deleteRepositoryFromDb(@PathVariable Long id){
+        repoDeleter.deleteById(id);
+        return ResponseEntity.ok(RepoMapper.mapToDeleteRepoResponseDto(id));
+    }
+
+    @PutMapping(value = "/{id}")
+    ResponseEntity<RepoResponseDto> updateRepository(@PathVariable Long id, @RequestBody @Valid UpdateRepoRequestDto updateRepoRequestDto){
+        Repo repoFromRequest = RepoMapper.mapFromUpdateRepoRequestDtoToRepo(id, updateRepoRequestDto);
+        repoUpdater.updateRepository(id, repoFromRequest);
         return ResponseEntity.ok(RepoMapper.mapFromRepoToRepoResponseDto(repoFromRequest));
     }
 
