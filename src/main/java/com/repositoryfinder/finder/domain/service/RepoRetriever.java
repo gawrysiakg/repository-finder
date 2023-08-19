@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -24,6 +25,10 @@ public class RepoRetriever {
 
     public List<Repo> getAllReposForUser(Pageable pageable, String username){
         return repository.findAllByOwner(pageable, username);
+    }
+
+    public Optional<Repo> findById(Long id){
+        return repository.findRepoById(id);
     }
 
 

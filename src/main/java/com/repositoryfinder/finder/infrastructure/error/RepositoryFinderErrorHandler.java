@@ -2,6 +2,7 @@ package com.repositoryfinder.finder.infrastructure.error;
 
 import com.repositoryfinder.finder.domain.model.NotAcceptableResponseMediaTypeException;
 import com.repositoryfinder.finder.domain.model.NotExistingUserException;
+import com.repositoryfinder.finder.domain.model.RepoNotFoundException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,6 +36,12 @@ public class RepositoryFinderErrorHandler  {
     ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(HttpMediaTypeNotAcceptableException exception) {
         log.warn("RepositoryFinderErrorHandler is handling HttpMediaTypeNotAcceptableException: "+exception.getMessage());
         return toResponseEntity(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
+    }
+
+    @ExceptionHandler(RepoNotFoundException.class)
+    ResponseEntity<ErrorUserResponseDto> handleRepoNotFoundException(RepoNotFoundException exception) {
+        log.warn("RepositoryFinderErrorHandler is handling RepoNotFoundException: "+exception.getMessage());
+        return toResponseEntity(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 
     private static ResponseEntity<ErrorUserResponseDto> toResponseEntity(HttpStatus status, String message) {
