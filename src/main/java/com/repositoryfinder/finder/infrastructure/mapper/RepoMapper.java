@@ -1,6 +1,7 @@
 package com.repositoryfinder.finder.infrastructure.mapper;
 
 import com.repositoryfinder.finder.domain.model.Repo;
+import com.repositoryfinder.finder.infrastructure.dto.RepoRequestDto;
 import com.repositoryfinder.finder.infrastructure.dto.RepoResponseDto;
 
 import java.util.List;
@@ -16,5 +17,9 @@ public class RepoMapper {
 
     public static List<RepoResponseDto> mapToListRepoResponseDto(List<Repo> list){
         return list.stream().map(RepoMapper::mapFromRepoToRepoResponseDto).collect(Collectors.toList());
+    }
+
+    public static Repo mapFromRepoRequestDtoToRepo(RepoRequestDto repoRequestDto){
+        return new Repo( repoRequestDto.owner(), repoRequestDto.name());
     }
 }

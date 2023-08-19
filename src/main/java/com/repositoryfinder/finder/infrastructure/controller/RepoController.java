@@ -1,6 +1,7 @@
 package com.repositoryfinder.finder.infrastructure.controller;
 
 import com.repositoryfinder.finder.domain.model.RepoNotFoundException;
+import com.repositoryfinder.finder.infrastructure.dto.RepoRequestDto;
 import com.repositoryfinder.finder.infrastructure.mapper.GithubMapper;
 import com.repositoryfinder.finder.domain.model.Repo;
 import com.repositoryfinder.finder.domain.service.RepoAdder;
@@ -62,7 +63,12 @@ public class RepoController {
         }
     }
 
-
+    @PostMapping
+    ResponseEntity<RepoResponseDto> addRepositoryToDb(RepoRequestDto repoRequestDto){
+        Repo repoFromRequest = RepoMapper.mapFromRepoRequestDtoToRepo(repoRequestDto);
+        repoAdder.addRepo(repoFromRequest);
+        return ResponseEntity.ok(RepoMapper.mapFromRepoToRepoResponseDto(repoFromRequest));
+    }
 
 
 }
