@@ -1,8 +1,13 @@
 ## Repository Finder App
 
-### An application that retrieves all user repositories (that are not forks), all branch names,and the sha of the last commit for each branch. 
+### An application that retrieves all user repositories (that are not forks), all branch names,and the sha of the last commit for each branch. Another feature of the application is the ability to manually add, remove, update individual repositories in the database. When we use GetMapping with GithubController, we will get a list of all repositories of a given user, additionally, the application will update its database with repositories that it did not have before.
 
-
+### Used Technologies:
+- SpringBoot (with Error Handling, Validation, Pageable)
+- Docker compose
+- PostgreSQL
+- Swagger
+- Github API
 
 As an api consumer, give json:
 ```
@@ -70,6 +75,11 @@ As an api consumer, if You give header “Accept: application/xml”, You will r
 ![badUsername](src/main/resources/images/badUsername.png)
 
 ![badAccept](src/main/resources/images/badAccept.png)
+
+#
+### Swagger
+![swagger2](src/main/resources/images/swagger2.png)
+
 #
 ### Author: GG
 
