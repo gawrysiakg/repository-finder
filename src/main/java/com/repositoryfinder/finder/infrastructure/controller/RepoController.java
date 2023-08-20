@@ -2,7 +2,6 @@ package com.repositoryfinder.finder.infrastructure.controller;
 
 import com.repositoryfinder.finder.domain.model.RepoNotFoundException;
 import com.repositoryfinder.finder.infrastructure.dto.*;
-import com.repositoryfinder.finder.infrastructure.mapper.GithubMapper;
 import com.repositoryfinder.finder.domain.model.Repo;
 import com.repositoryfinder.finder.domain.service.RepoAdder;
 import com.repositoryfinder.finder.domain.service.RepoDeleter;

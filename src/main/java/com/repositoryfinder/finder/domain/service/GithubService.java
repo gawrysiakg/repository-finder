@@ -54,7 +54,6 @@ public class GithubService {
                 List<Branch> allBranchesForRepo = githubClient.getAllBranchesForRepo(username, repository.name());
                 list.add(new SingleRepository(repository.name(), new Owner(username), repository.fork(), allBranchesForRepo));
             }
-
         } catch (FeignException.FeignServerException serverException) {
             log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
         } catch (RetryableException retryableException) {

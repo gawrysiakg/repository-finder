@@ -13,7 +13,6 @@ public interface RepoRepository extends Repository<Repo, Long> {
 
     Repo save(Repo repo);
 
-    //@Modifying nie trzeba tu bo ta operacja nie modyfikuje danych
     @Query("SELECT r FROM Repo r")
     List<Repo> findAll(Pageable pageable);
 

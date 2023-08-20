@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 public class RepoAdder {
 
     private final RepoRepository repository;
-
     public RepoAdder(RepoRepository repository) {
         this.repository = repository;
     }
-
     public Repo addRepo(Repo repo){
         return repository.save(repo);
     }

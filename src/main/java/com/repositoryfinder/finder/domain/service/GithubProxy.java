@@ -11,13 +11,10 @@ import java.util.List;
 @FeignClient(value = "github-client")
 public interface GithubProxy {
 
-
     @GetMapping("/users/{username}/repos")
     List<RepositoryProperty> getAllReposForUser(@PathVariable String username);
 
 
     @GetMapping("/repos/{username}/{repo}/branches")
     List<Branch> getAllBranchesForRepo(@PathVariable String username, @PathVariable String repo);
-
-
 }

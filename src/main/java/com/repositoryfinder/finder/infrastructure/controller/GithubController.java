@@ -37,19 +37,10 @@ public class GithubController {
     }
 
 
-//    @GetMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-//    ResponseEntity<List<GithubResponseDto>> getAllByUsername(@RequestBody @Valid GithubRequestDto githubRequestDto, @RequestHeader(name = ACCEPT) String accept) {
-//        isApplicationXmlAcceptHeader(accept);
-//        List<SingleRepository> allReposAndBranches = githubService.getAllReposWithBranches(githubRequestDto.username());
-//        return ResponseEntity.ok(GithubMapper.mapToGithubResponseDtoList(allReposAndBranches));
-//    }
-
-
     private static void isApplicationXmlAcceptHeader(String accept) {
         if (accept.equals(MediaType.APPLICATION_XML_VALUE)) {
             throw new NotAcceptableResponseMediaTypeException("xml is not acceptable media type, only application/json");
         }
     }
-
 
 }

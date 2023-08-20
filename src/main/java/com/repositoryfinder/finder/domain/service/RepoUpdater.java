@@ -29,35 +29,31 @@ public class RepoUpdater {
     }
 
 
-
     public Repo updateRepository(Long id, Repo repoFromRequest) {
         Optional<Repo> repoById = repository.findRepoById(id);
-        if(repoById.isPresent()){
-           // Repo repoFromDb = repoById.get();
+        if (repoById.isPresent()) {
             repository.updateById(id, repoFromRequest);
-           // repoFromDb.setName(repoFromRequest.getName());
-            //repoFromDb.setOwner(repoFromRequest.getOwner());
             return repoFromRequest;
         } else {
-            log.info("RepoNotFoundException - Not found repository with id: "+id);
-            throw new RepoNotFoundException("Not found repository with id: "+id);
+            log.info("RepoNotFoundException - Not found repository with id: " + id);
+            throw new RepoNotFoundException("Not found repository with id: " + id);
         }
     }
 
     public Repo partiallyUpdateRepository(Long id, Repo repoFromRequest) {
         Optional<Repo> repoById = repository.findRepoById(id);
-        if(repoById.isPresent()){
-             Repo repoFromDb = repoById.get();
-            if(repoFromRequest.getOwner()!=null){
+        if (repoById.isPresent()) {
+            Repo repoFromDb = repoById.get();
+            if (repoFromRequest.getOwner() != null) {
                 repoFromDb.setOwner(repoFromRequest.getOwner());
             }
-            if(repoFromRequest.getName()!=null){
+            if (repoFromRequest.getName() != null) {
                 repoFromDb.setName(repoFromRequest.getName());
             }
             return repoFromRequest;
         } else {
-            log.info("RepoNotFoundException - Not found repository with id: "+id);
-            throw new RepoNotFoundException("Not found repository with id: "+id);
+            log.info("RepoNotFoundException - Not found repository with id: " + id);
+            throw new RepoNotFoundException("Not found repository with id: " + id);
         }
     }
 }
