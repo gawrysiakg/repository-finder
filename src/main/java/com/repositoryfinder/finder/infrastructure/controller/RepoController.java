@@ -77,8 +77,16 @@ public class RepoController {
     @PutMapping(value = "/{id}")
     ResponseEntity<RepoResponseDto> updateRepository(@PathVariable Long id, @RequestBody @Valid UpdateRepoRequestDto updateRepoRequestDto){
         Repo repoFromRequest = RepoMapper.mapFromUpdateRepoRequestDtoToRepo(id, updateRepoRequestDto);
-        repoUpdater.updateRepository(id, repoFromRequest);
-        return ResponseEntity.ok(RepoMapper.mapFromRepoToRepoResponseDto(repoFromRequest));
+
+        Repo updatedRepo = repoUpdater.updateRepository(id, repoFromRequest);
+        return ResponseEntity.ok(RepoMapper.mapFromRepoToRepoResponseDto(updatedRepo));
+    }
+
+    @PatchMapping(value = "/{id}")
+    ResponseEntity<RepoResponseDto> partiallyUpdateRepository(@PathVariable Long id, @RequestBody UpdateRepoRequestDto updateRepoRequestDto){
+        Repo repoFromRequest = RepoMapper.mapFromUpdateRepoRequestDtoToRepo(id, updateRepoRequestDto);
+        Repo updatedRepo = repoUpdater.partiallyUpdateRepository(id, repoFromRequest);
+        return ResponseEntity.ok(RepoMapper.mapFromRepoToRepoResponseDto(updatedRepo));
     }
 
 

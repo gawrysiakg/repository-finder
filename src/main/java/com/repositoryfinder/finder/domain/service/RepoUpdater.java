@@ -4,6 +4,7 @@ import com.repositoryfinder.finder.domain.model.Repo;
 import com.repositoryfinder.finder.domain.model.RepoNotFoundException;
 import com.repositoryfinder.finder.domain.model.SingleRepository;
 import com.repositoryfinder.finder.domain.repository.RepoRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
+@Transactional
 public class RepoUpdater {
 
 
@@ -27,12 +29,31 @@ public class RepoUpdater {
     }
 
 
+
     public Repo updateRepository(Long id, Repo repoFromRequest) {
         Optional<Repo> repoById = repository.findRepoById(id);
         if(repoById.isPresent()){
-            Repo repoFromDb = repoById.get();
-            repoFromDb.setName(repoFromRequest.getName());
-            repoFromDb.setOwner(repoFromRequest.getOwner());
+           // Repo repoFromDb = repoById.get();
+            repository.updateById(id, repoFromRequest);
+           // repoFromDb.setName(repoFromRequest.getName());
+            //repoFromDb.setOwner(repoFromRequest.getOwner());
+            return repoFromRequest;
+        } else {
+            log.info("RepoNotFoundException - Not found repository with id: "+id);
+            throw new RepoNotFoundException("Not found repository with id: "+id);
+        }
+    }
+
+    public Repo partiallyUpdateRepository(Long id, Repo repoFromRequest) {
+        Optional<Repo> repoById = repository.findRepoById(id);
+        if(repoById.isPresent()){
+             Repo repoFromDb = repoById.get();
+            if(repoFromRequest.getOwner()!=null){
+                repoFromDb.setOwner(repoFromRequest.getOwner());
+            }
+            if(repoFromRequest.getName()!=null){
+                repoFromDb.setName(repoFromRequest.getName());
+            }
             return repoFromRequest;
         } else {
             log.info("RepoNotFoundException - Not found repository with id: "+id);
