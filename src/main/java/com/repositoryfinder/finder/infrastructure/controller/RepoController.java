@@ -7,7 +7,7 @@ import com.repositoryfinder.finder.domain.service.RepoAdder;
 import com.repositoryfinder.finder.domain.service.RepoDeleter;
 import com.repositoryfinder.finder.domain.service.RepoRetriever;
 import com.repositoryfinder.finder.domain.service.RepoUpdater;
-import com.repositoryfinder.finder.infrastructure.mapper.RepoMapper;
+import com.repositoryfinder.finder.infrastructure.dto.mapper.RepoMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Log4j2
 @ControllerAdvice
-//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class RepositoryFinderErrorHandler  {
 
 
@@ -23,8 +22,6 @@ public class RepositoryFinderErrorHandler  {
         log.warn("NotExistingUserException while Get request");
         return toResponseEntity(HttpStatus.NOT_FOUND, exception.getMessage() );
     }
-
-
 
 //    @ExceptionHandler(NotAcceptableResponseMediaTypeException.class)
 //    ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(NotAcceptableResponseMediaTypeException exception) {

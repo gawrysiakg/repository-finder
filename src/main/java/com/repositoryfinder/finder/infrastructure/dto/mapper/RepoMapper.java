@@ -1,4 +1,4 @@
-package com.repositoryfinder.finder.infrastructure.mapper;
+package com.repositoryfinder.finder.infrastructure.dto.mapper;
 
 import com.repositoryfinder.finder.domain.model.Repo;
 import com.repositoryfinder.finder.infrastructure.dto.DeleteRepoResponseDto;
