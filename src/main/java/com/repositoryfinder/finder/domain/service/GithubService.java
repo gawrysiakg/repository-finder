@@ -26,23 +26,25 @@ public class GithubService {
 
     public List<RepositoryProperty> getNotForkedRepositoryNamesForUser(String username) {
         try {
-            List<RepositoryProperty> notForkedRepositoryList = githubClient.getAllReposForUser(username).stream()
+            return githubClient.getAllReposForUser(username).stream()
                     .filter(repositoryProperty -> !repositoryProperty.fork())
                     .toList();
-
-            return notForkedRepositoryList;
         } catch (FeignException.FeignClientException exception) {
             log.error("Feign client exception " + exception.status());
             throw new NotExistingUserException("Resources not found for this user, probably bad username");
         } catch (FeignException.FeignServerException serverException) {
             log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
+            throw new CustomFeignException("Feign server exception " + serverException.getMessage() + " " + serverException.status());
         } catch (RetryableException retryableException) {
             log.error("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
+            throw new CustomFeignException("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
         } catch (FeignException feignException) {
             log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
+            throw new CustomFeignException("Feign exception " + feignException.getMessage() + " " + feignException.status());
         }
-        return new ArrayList<>();
     }
+
+
 
 
     public List<SingleRepository> getAllReposWithBranches(String username) {
@@ -56,13 +58,16 @@ public class GithubService {
             }
         } catch (FeignException.FeignServerException serverException) {
             log.error("Feign server exception " + serverException.getMessage() + " " + serverException.status());
+            throw new CustomFeignException("Feign server exception " + serverException.getMessage() + " " + serverException.status());
         } catch (RetryableException retryableException) {
             log.error("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
+            throw new CustomFeignException("Retryable exception " + retryableException.getMessage() + " " + retryableException.status());
         } catch (FeignException feignException) {
             log.error("Feign exception " + feignException.getMessage() + " " + feignException.status());
+            throw new CustomFeignException("Feign exception " + feignException.getMessage() + " " + feignException.status());
         }
 
-        list.forEach(single->repoUpdater.updateToDatabaseIfNotExist(single));
+        list.forEach(repoUpdater::updateToDatabaseIfNotExist);
         return list;
     }
 

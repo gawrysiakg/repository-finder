@@ -11,8 +11,8 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: postgres
     volumes:
-        - repository_finder_pgdata:/var/lib/postgresql/data
-        - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+      - repository_finder_pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/create_tables.sql
   pgadmin:
     image: dpage/pgadmin4
     container_name: repository_finder_pgadmin4_container

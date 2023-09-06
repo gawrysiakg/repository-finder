@@ -1,5 +1,6 @@
 package com.repositoryfinder.finder.infrastructure.error;
 
+import com.repositoryfinder.finder.domain.model.CustomFeignException;
 import com.repositoryfinder.finder.domain.model.NotAcceptableResponseMediaTypeException;
 import com.repositoryfinder.finder.domain.model.NotExistingUserException;
 import com.repositoryfinder.finder.domain.model.RepoNotFoundException;
@@ -40,6 +41,14 @@ public class RepositoryFinderErrorHandler  {
         log.warn("RepositoryFinderErrorHandler is handling RepoNotFoundException: "+exception.getMessage());
         return toResponseEntity(HttpStatus.NOT_FOUND, exception.getMessage());
     }
+
+
+    @ExceptionHandler(CustomFeignException.class)
+    ResponseEntity<ErrorUserResponseDto>handleCustomFeignException(CustomFeignException exception){
+        log.warn("CustomFeignException while Get request");
+        return toResponseEntity(HttpStatus.NOT_FOUND, exception.getMessage() );
+    }
+
 
     private static ResponseEntity<ErrorUserResponseDto> toResponseEntity(HttpStatus status, String message) {
         return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(new ErrorUserResponseDto(status, message));
