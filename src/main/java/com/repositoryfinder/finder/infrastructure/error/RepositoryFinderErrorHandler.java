@@ -24,11 +24,11 @@ public class RepositoryFinderErrorHandler  {
         return toResponseEntity(HttpStatus.NOT_FOUND, exception.getMessage() );
     }
 
-//    @ExceptionHandler(NotAcceptableResponseMediaTypeException.class)
-//    ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(NotAcceptableResponseMediaTypeException exception) {
-//        log.warn("RepositoryFinderErrorHandler is handling NotAcceptableResponseMediaTypeException: "+exception.getMessage());
-//        return toResponseEntity(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
-//    }
+    @ExceptionHandler(NotAcceptableResponseMediaTypeException.class)
+    ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(NotAcceptableResponseMediaTypeException exception) {
+        log.warn("RepositoryFinderErrorHandler is handling NotAcceptableResponseMediaTypeException: "+exception.getMessage());
+        return toResponseEntity(HttpStatus.NOT_ACCEPTABLE, exception.getMessage());
+    }
 
     @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
     ResponseEntity<ErrorUserResponseDto> handleNotAcceptableResponseMediaTypeException(HttpMediaTypeNotAcceptableException exception) {
