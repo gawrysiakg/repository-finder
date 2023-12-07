@@ -1,5 +1,8 @@
 ## Repository Finder App
 
+![Build Status](https://github.com/gawrysiakg/repository-finder/actions/workflows/build-and-test.yml/badge.svg)
+
+
 ### An application that retrieves all user repositories (that are not forks), all branch names,and the sha of the last commit for each branch. Another feature of the application is the ability to manually add, remove, update individual repositories in the database. When we use GetMapping with GithubController, we will get a list of all repositories of a given user, additionally, the application will update its database with repositories that it did not have before.
 
 ### Used Technologies:
